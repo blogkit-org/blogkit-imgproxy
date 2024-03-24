@@ -43,8 +43,7 @@ export default async function(req: Req) {
         const proxyURL = `${imgproxyUrl}/${preset}/resize:fill:${width}:${height}/q:${quality}/plain/${url}`
         const image = await fetch(url, {
             headers: {
-                "Accept": "image/avif,image/webp,image/apng,*/*",
-                "User-Agent": "Blogkit Image Proxy"
+                ...Object.fromEntries(req.headers),
             }
         })
         const headers = new Headers(image.headers);
