@@ -85,5 +85,8 @@ async function handleRequest(request: Request) {
 }
 
 
-const server = serve({ fetch: handleRequest })
+const server = serve({
+  fetch: handleRequest,
+  port: process.env.PORT || 3000,
+})
 console.log('🔥', server.port)
