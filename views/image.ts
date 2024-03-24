@@ -1,0 +1,59 @@
+import { Req } from "../server/server";
+
+const preset = "pr:sharp"
+
+let allowedDomains = process?.env?.ALLOWED_REMOTE_DOMAINS?.split(",") || ["*"];
+let imgproxyUrl = process?.env?.IMGPROXY_URL || "http://imgproxy:8080";
+if (process.env.NODE_ENV === "development") {
+    imgproxyUrl = "http://localhost:8888"
+}
+allowedDomains = allowedDomains.map(d => d.trim());
+
+
+function validateURL(fullURL: string | null): fullURL is string {
+    if (!fullURL) {
+        return false;
+    }
+    if (!fullURL.startsWith("http://") && !fullURL.startsWith("https://")) {
+        return false;
+    }
+    return true;
+}
+
+function isAllowedDomain(url: string) {
+    if (allowedDomains.includes("*")) {
+        return true;
+    }
+    const domain = new URL(url).hostname;
+    return allowedDomains.includes(domain);
+}
+
+export default async function(req: Req) {
+    const url = req.query.get("u")
+    if (!validateURL(url)) {
+        return new Response("Invalid URL", { status: 400 })
+    }
+    if (!isAllowedDomain(url)) {
+        return new Response("Domain not allowed", { status: 403 })
+    }
+    const width = req.query.get("width") || 0;
+    const height = req.query.get("height") || 0;
+    const quality = req.query.get("quality") || 75;
+    try {
+        const proxyURL = `${imgproxyUrl}/${preset}/resize:fill:${width}:${height}/q:${quality}/plain/${url}`
+        const image = await fetch(url, {
+            headers: {
+                "Accept": "image/avif,image/webp,image/apng,*/*",
+                "User-Agent": "Blogkit Image Proxy"
+            }
+        })
+        const headers = new Headers(image.headers);
+        headers.set("Server", "Blogkit Image Proxy")
+        return new Response(image.body, {
+            headers
+        })
+    } catch (e) {
+        console.log(e)
+        return new Response("Error resizing image")
+    }
+}
