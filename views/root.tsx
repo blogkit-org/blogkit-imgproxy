@@ -1,9 +1,10 @@
 import { renderToReadableStream } from "react-dom/server";
 
-function Component(props: { message: string }) {
+function Component() {
   return (
     <body>
-      <h1>{props.message}</h1>
+      <h1>BlogKit</h1>
+      <a href="https://blogkit.org">BlogKit</a>
     </body>
   );
 }
@@ -11,7 +12,7 @@ function Component(props: { message: string }) {
 
 export default async function() {
     const stream = await renderToReadableStream(
-      <Component message="Hello from server!" />,
+      <Component />,
     );
     return new Response(stream, {
         headers: {
