@@ -8,7 +8,7 @@ RUN bun install --omit=dev
 
 COPY . /usr/app/
 
-ENV PORT 8080
+ENV PORT 3000
 ENV NODE_ENV production
 
 EXPOSE ${PORT}
