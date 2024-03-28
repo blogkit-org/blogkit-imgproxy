@@ -13,16 +13,6 @@ console.log("Allowed domains", allowedDomains)
 console.log("Imgproxy URL", imgproxyUrl)
 
 
-function validateURL(fullURL: string | null): fullURL is string {
-    if (!fullURL) {
-        return false;
-    }
-    if (!fullURL.startsWith("http://") && !fullURL.startsWith("https://")) {
-        return false;
-    }
-    return true;
-}
-
 function isAllowedDomain(url: string) {
     if (allowedDomains.includes("*")) {
         return true;
@@ -32,13 +22,17 @@ function isAllowedDomain(url: string) {
 }
 
 export default async function(req: Req) {
-    const url = req.query.get("u")
-    if (!validateURL(url)) {
+    const url = decodeURIComponent(req.query.get("u") || "").trim()
+    if (!url) {
+        return new Response("URL not provided", { status: 400 })
+    }
+    if (!url.startsWith("http://") && !url.startsWith("https://")) {
         return new Response("Invalid URL", { status: 400 })
     }
     if (!isAllowedDomain(url)) {
         return new Response("Domain not allowed", { status: 403 })
     }
+    console.log("URL", url)
     const width = req.query.get("width") || 0;
     const height = req.query.get("height") || 0;
     const quality = req.query.get("quality") || 75;
