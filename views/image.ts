@@ -9,6 +9,9 @@ if (process.env.NODE_ENV === "development") {
 }
 allowedDomains = allowedDomains.map(d => d.trim());
 
+console.log("Allowed domains", allowedDomains)
+console.log("Imgproxy URL", imgproxyUrl)
+
 
 function validateURL(fullURL: string | null): fullURL is string {
     if (!fullURL) {
