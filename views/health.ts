@@ -1,3 +1,3 @@
-export async function health() {
+export default async function health() {
     return "OK"
 }
