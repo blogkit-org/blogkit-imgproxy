@@ -38,7 +38,7 @@ export default async function(req: Req) {
     const quality = req.query.get("quality") || 75;
     try {
         const proxyURL = `${imgproxyUrl}/${preset}/resize:fill:${width}:${height}/q:${quality}/plain/${url}`
-        const image = await fetch(url, {
+        const image = await fetch(proxyURL, {
             headers: {
                 ...Object.fromEntries(req.headers),
             }
