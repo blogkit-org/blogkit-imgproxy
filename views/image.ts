@@ -18,11 +18,18 @@ function isAllowedDomain(url: string) {
         return true;
     }
     const domain = new URL(url).hostname;
-    return allowedDomains.includes(domain);
+    // partial match
+    for (const d of allowedDomains) {
+        if (domain.endsWith(d)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 export default async function(req: Req) {
     const url = decodeURIComponent(req.query.get("u") || "").trim()
+    console.log("URL", url)
     if (!url) {
         return new Response("URL not provided", { status: 400 })
     }
@@ -32,7 +39,6 @@ export default async function(req: Req) {
     if (!isAllowedDomain(url)) {
         return new Response("Domain not allowed", { status: 403 })
     }
-    console.log("URL", url)
     const width = req.query.get("width") || 0;
     const height = req.query.get("height") || 0;
     const quality = req.query.get("quality") || 75;
