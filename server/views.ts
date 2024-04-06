@@ -55,11 +55,7 @@ const getView = async (
   viewName: string
 ): Promise<null | ((req: Req) => Promise<Response | any>)> => {
   await warmupView(viewName)
-  const view = viewMap.get(viewName)
-  if (!view) {
-    return await getView('root')
-  }
-  return view
+  return viewMap.get(viewName) ?? null
 }
 
 
