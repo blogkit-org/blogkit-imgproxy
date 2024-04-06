@@ -1,10 +1,10 @@
-FROM oven/bun:alpine
+FROM oven/bun
 
 RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
 COPY package*.json bun.lockb /usr/app/
-RUN bun install --omit=dev
+RUN bun install
 
 COPY . /usr/app/
 
