@@ -18,7 +18,7 @@ const warmupView = async (viewName: string) => {
     return
   }
 
-  if (!viewName.match(/^[a-zA-Z0-9/]+$/)) {
+  if (!viewName.match(/^[a-zA-Z0-9\./]+$/)) {
     if (viewName !== '/favicon.ico') {
       console.error('Invalid view name', viewName)
     }
