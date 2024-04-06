@@ -89,4 +89,4 @@ const server = serve({
   fetch: handleRequest,
   port: process.env.PORT || 3000,
 })
-console.log('🔥', server.port)
+console.log('👉', server.port)
