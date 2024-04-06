@@ -85,6 +85,7 @@ const handleError = (req: Req, error: any) => {
  */
 export const startView = async (req: Req) => {
   const viewName = req.url.pathname.substring(1)
+  console.log('startView', viewName)
   const view = await getView(viewName)
 
   if (!view) {
